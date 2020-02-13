@@ -34,7 +34,6 @@ public class IACatalogue extends JFrame {
 	private JButton fwdBTN = new JButton("\u25B6");
 	
 	private boolean displayed = false;
-	
 	private JLabel titletext = new JLabel("Catalogue");
 	private JLabel searchLbl = new JLabel("Movie Search:");
 	
@@ -194,149 +193,6 @@ public class IACatalogue extends JFrame {
 		fwdBTN.addActionListener(NextPageAction);
 		panel.add(fwdBTN, c7);
 		
-//		//read ratings from movie arrayList
-//		String[] ratings = new String[10];
-//		for (int j = 0; j < 10; j++) {
-//			ratings[j] = c.movies.get(j).getRating() + "%";
-//		}
-//		int ctr = 0;
-//
-//		String[] years = new String[10];
-//		for (int j = 0; j < 10; j++) {
-//			years[j] = c.movies.get(j).getYear();
-//		}
-//
-//		for (int i = 0; i < 10; i++) {
-//			output[i] = new JLabel("        "+ratings[i]+"       "+years[i]+"        ");
-//		}
-//		
-//		
-//		for (int n = 0; n < 10; n++) { //10 can also be rating.length
-//			GridBagConstraints ctf = new GridBagConstraints();
-//
-//			if (ctr < 5) {
-//				ctf.gridy = 8;
-//				ctf.gridx = 2*n;
-//			}
-//			else {
-//				ctf.gridy = 16;
-//				ctf.gridx = 2*(n%5); 
-//			}
-//			
-//			ctf.gridwidth = 2;
-//			
-//
-//			panel.add(output[n],ctf);
-//
-//			ctr++;
-//		}
-//		String[] runTimes = new String[10];
-//		for (int j = 0; j < 10; j++) {
-//			runTimes[j] = c.movies.get(j).getRunTime() + " minutes";
-//		}
-//		for (int i = 0; i < 10; i++) {
-//			runTime[i] = new JLabel(runTimes[i]);
-//		}
-//		
-//		int ctr3 = 0;
-//
-//		for (int n = 0; n < 10; n++) {
-//
-//			GridBagConstraints ctf3 = new GridBagConstraints();
-//
-//			if (ctr3 < 5) {
-//				ctf3.gridy = 9;
-//				ctf3.gridx = 2*n;
-//			}
-//			else {
-//				ctf3.gridy = 17;
-//				ctf3.gridx = 2*(n%5); 
-//			}
-//			ctf3.gridwidth = 2;
-//
-//			panel.add(runTime[n],ctf3);
-//
-//			ctr3++;
-//		}
-//		
-//		String[] titles = new String[10];
-//		for (int j = 0; j < 10; j++) {
-//			titles[j] = c.movies.get(j).getTitle();
-//		}
-//		for (int i = 0; i < 10; i++) {
-//			if (titles[i].length() > 15) {
-//				title[i] = new JLabel(titles[i].substring(0,15) + "...");
-//			}
-//			else {
-//				title[i] = new JLabel(titles[i]);
-//			}
-//			
-//		}
-//		
-//		
-//		int ctr4 = 0;
-//
-//		for (int n = 0; n < 10; n++) {
-//
-//			GridBagConstraints ctf4 = new GridBagConstraints();
-//
-//			if (ctr4 < 5) {
-//				ctf4.gridy = 10;
-//				ctf4.gridx = 2*n;
-//			}
-//			else {
-//				ctf4.gridy = 18;
-//				ctf4.gridx = 2*(n%5); 
-//			}
-//			ctf4.gridwidth = 2;
-//			
-//			title[n].addMouseListener(movieAction);
-//			title[n].setFont(c1.bold);
-//			panel.add(title[n],ctf4);
-//
-//			ctr4++;
-//		}
-//		
-//		String[] images = new String[10];
-//		for (int l = 0; l < 10; l++) {
-//			images[l] = c.movies.get(l).getImg();
-//		}
-//		for (int m = 0; m < 10; m++) {
-//			image[m] = new JLabel(images[m]);
-//		}
-//		
-//		int ctr5 = 0;
-//		
-//		ImageIcon icon;
-//		
-//		JLabel thumb;
-//		
-//		for (int n = 0; n < 10; n++) {
-//
-//			icon = new ImageIcon("Images/"+images[n]);
-//			thumb = new JLabel();
-//			thumb.setIcon(icon);
-//			thumb.setText(images[n]);
-//			thumb.setPreferredSize(new Dimension(100,150));
-//			
-//			GridBagConstraints ctf5 = new GridBagConstraints();
-//
-//			if (ctr5 < 5) {
-//				ctf5.gridy = 3;
-//				ctf5.gridx = 2*n;
-//			}
-//			else {
-//				ctf5.gridy = 11;
-//				ctf5.gridx = 2*(n%5); 
-//			}
-//			ctf5.gridwidth = 2;
-//			ctf5.gridheight = 5;
-//			
-//			thumb.addMouseListener(movieAction);
-//			panel.add(thumb,ctf5);
-//
-//			ctr5++;
-//		}
 		
 		GridBagConstraints panel2 = new GridBagConstraints();
 		panel2.gridx = 0;
@@ -375,7 +231,8 @@ public class IACatalogue extends JFrame {
 
 		//read values from movie arrayList
 		for (int j = start; j < end; j++) {
-			Movie movie = new Movie(c1.movies.get(j));
+			//Movie movie = new Movie(c1.movies.get(j));
+			Movie movie = c1.movies.get(j);
 			ratings[j-start] = movie.getRating() + "%";
 			years[j-start] = movie.getYear();
 			runTimes[j-start] = movie.getRunTime() + " minutes";

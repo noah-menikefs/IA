@@ -61,7 +61,7 @@ public class SearchResults extends JFrame {
 			
 			for (int i = 0; i < c1.movies.size(); i++) {
 				if (title.equals(c1.movies.get(i).getTitle())) {
-					movie = new Movie(c1.movies.get(i));
+					movie = c1.movies.get(i);
 					break;
 				}
 			}

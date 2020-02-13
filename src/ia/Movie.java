@@ -10,7 +10,6 @@ public class Movie {
 	private String language = "";
 	private String director = "";
 	private String summary = "";
-
 	
 	public Movie(String[] arrMovie) {
 		title = arrMovie[0];
@@ -22,18 +21,6 @@ public class Movie {
 		language = arrMovie[6];
 		director = arrMovie[7];
 		summary = arrMovie[8];
-	}
-	
-	public Movie(Movie movie) {
-		title = movie.title;
-		rating = movie.rating;
-		year = movie.year;
-		runTime = movie.runTime;
-		img = movie.img;
-		genre = movie.genre;
-		language = movie.language;
-		director = movie.director;
-		summary = movie.summary;
 	}
 	
 	public String getTitle() { return title; }
@@ -49,5 +36,4 @@ public class Movie {
 	public String toString() {
 		return (title);
 	}
-	
 }

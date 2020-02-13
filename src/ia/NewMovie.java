@@ -26,7 +26,7 @@ import javax.swing.border.EmptyBorder;
 
 public class NewMovie extends JFrame {
 	
-	private String[] genres = {"Action","Adventure","Comedy","Crime","Drama","Horror","Musical","Sci-Fi","War","Western"};
+	private String[] genres = {"Action","Adventure","Comedy","Crime","Drama","Horror","Musical","Other","Sci-Fi","War","Western"};
 	
 	private JPanel panel = new JPanel(new GridBagLayout());
 	private JPanel titlePanel = new JPanel();
@@ -122,6 +122,7 @@ public class NewMovie extends JFrame {
 				directorField.setText("");
 				ratingField.setValue(0);
 				descriptionField.setText("");
+				imgField.setText("");
 				
 				c1.addMovie(title, Integer.toString(rating), Integer.toString(year), Integer.toString(runtime), img, genre, language, director, description);
 				

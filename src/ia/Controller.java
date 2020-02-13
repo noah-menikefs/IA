@@ -22,37 +22,36 @@ import javax.swing.SwingUtilities;
 
 public class Controller {
 	
-	Font title = new Font("Courier",Font.BOLD,23);
-	Font bold = new Font("Lucida Grande",Font.BOLD,13);
-	Font normal = new Font("Lucida Grande",Font.PLAIN,13);
-	static Color GREEN = new Color(45,179,0);
-	static Color WHITE = new Color(240, 240, 240);
-	static Color RED = new Color(255,0,0);
-	
-	private IASystemData data;
-	private IASystemData adminData;
+	Font title = new Font("Courier",Font.BOLD,23); //Font for titles used at the top of screens
+	Font bold = new Font("Lucida Grande",Font.BOLD,13); //Font for any bolded movie titles
+	Font normal = new Font("Lucida Grande",Font.PLAIN,13); //Font for regular text
+	static Color GREEN = new Color(45,179,0); //Green colour used for success alerts and title's background
+	static Color WHITE = new Color(240, 240, 240); //White used for title's text
+	static Color RED = new Color(255,0,0); //Red used for errors and alerts
+	private IASystemData data; //Stores all student's usernames and passwords
+	private IASystemData adminData; //Stores all admin's usernames and passwords
 	private Scanner s;
 	
-	ArrayList<Movie> movies = new ArrayList<Movie>();
-	ArrayList<String> aLsignedoutTitles = new ArrayList<String>();
+	ArrayList<Movie> movies = new ArrayList<Movie>(); //List of movies in catalogue
+	ArrayList<String> aLsignedoutTitles = new ArrayList<String>(); //Titles of signed out movies
 	ArrayList<String> signedoutMovies = new ArrayList<String>();
 	
 	
 	int ctr = 0;
-	IALogin login = new IALogin(this);
-	AdminLogin aLogin = new AdminLogin(this);
-	AdminScreen aScreen = new AdminScreen(this);
+	IALogin login = new IALogin(this); //Login screen
+	AdminLogin aLogin = new AdminLogin(this); //Admin login screen
+	AdminScreen aScreen = new AdminScreen(this); //Admin action screen
 	
-	IACatalogue catalogue = new IACatalogue(this);
-	Search search = new Search(this);
-	SearchResults results = new SearchResults(this);
-	NewPword nPword = new NewPword(this);
-	ReturnedMovies returns = new ReturnedMovies(this);
-	NewStudent nStudent = new NewStudent(this);
-	SignOutTable signedOut = new SignOutTable(this);
-	NewMovie nMovie = new NewMovie(this);
-	MovieScreen mScreen = new MovieScreen(this);
-	SignoutScreen sScreen = new SignoutScreen(this);
+	IACatalogue catalogue = new IACatalogue(this); //Catalogue screen
+	Search search = new Search(this); //Search field screen
+	SearchResults results = new SearchResults(this); //Results from search screen
+	NewPword nPword = new NewPword(this); //Screen to change passwords
+	ReturnedMovies returns = new ReturnedMovies(this); //Screen to indicate a returned movie
+	NewStudent nStudent = new NewStudent(this); //New student screen
+	SignOutTable signedOut = new SignOutTable(this); //Screen of all borrowed movies
+	NewMovie nMovie = new NewMovie(this); //New movie screen
+	MovieScreen mScreen = new MovieScreen(this); //Movie screen
+	SignoutScreen sScreen = new SignoutScreen(this); //Screen to borrow a movie
 	
 	public Controller() {
 		data = new IASystemData("IAuserData.txt");
@@ -64,7 +63,7 @@ public class Controller {
 		System.out.println(movies);
 	}
 		
-	public void activateWindow(int a) {
+	public void activateWindow(int a) { //Used throughout the program to switch the visibility of screens
 		
 		login.setVisible(false);
 		catalogue.setVisible(false);
@@ -95,19 +94,26 @@ public class Controller {
 		else if (a == 13) { sScreen.setVisible(true); }
 		
 	}
-	
+	/**
+	 * This function returns true if the user's username and password are valid
+	 * @param u – This is the inputted username
+	 * @param pw - This is the inputted password
+	 * @param dataset - This is the data which holds either the admin or students' usernames and passwords
+	 * 
+	 */
 	public boolean checkPassword(String u, char[] pw, IASystemData dataset) {
 		String str = new String(pw);
 		for (int i = 0; i < dataset.getuserData().size(); i+=2) {
-			if (dataset.getuserData().get(i).contentEquals(u)) {
-				if (dataset.getuserData().get(i+1).contentEquals(str)){
+			if (dataset.getuserData().get(i).contentEquals(u) && dataset.getuserData().get(i+1).contentEquals(str)){
 					return true;
 				}
-			}
 		}
 		return false;
 	}
-	
+	/**
+	 * This method returns false if the inputted username is taken
+	 * @param u - Inputted username
+	 */
 	public boolean checkUsername(String u) {
 		for (int i = 0; i < data.getuserData().size(); i+=2) {
 			if (data.getuserData().get(i).contentEquals(u)) {
@@ -117,6 +123,11 @@ public class Controller {
 		return true;
 	}
 	
+	/**
+	 * This method returns true if the "password" field matches the "confirm password" field
+	 * @param pw - Inputted password
+	 * @param cpw - Secondary "confirmed" password
+	 */
 	public boolean pWordMatch(char[] pw, char[] cpw) {
 		if (Arrays.equals(pw,cpw)) {
 			return true;
@@ -124,6 +135,10 @@ public class Controller {
 		return false;
 	}
 	
+	/**
+	 * This method populates the list of movies from the text file which stores each film
+	 * @param fileName - The name of the file which currently stores movies and their attributes
+	 */
 	public void MoviePopulate(String fileName) {
 		try {
 			s = new Scanner(new File(fileName));
@@ -136,8 +151,12 @@ public class Controller {
 			String[] arrMovie = tn.split(",");
 			movies.add(new Movie(arrMovie));
 		}
+		sortAL();
 	}
 	
+	/**
+	 * This method populates the list of signed out movies from its respective text file
+	 */
 	public void signoutPopulate() {
 		try {
 			s = new Scanner(new File("SignOut.txt"));
@@ -152,7 +171,14 @@ public class Controller {
 			aLsignedoutTitles.add(arrMovie[1]);
 		}
 	}
-	
+	/**
+	 * This method writes onto the text file of signed out movies when a film is borrowed
+	 * It appends the student's name, length of sign out and title of the borrowed movie
+	 * Finally, it adds the title to the list of currently borrowed movies
+	 * @param name - The student's name
+	 * @param length - The borrowing length
+	 * @param title - The title of the movie
+	 */
 	public void movieSignout(String name, String length, String title) {
 		String date = java.time.LocalDate.now().toString();
 		
@@ -171,6 +197,11 @@ public class Controller {
 		System.out.println(aLsignedoutTitles);
 	}
 	
+	/**
+	 * This method removes a movie from the list of borrowed films
+	 * Additionally, the movie is removed from the text file of signed out films
+	 * @param title - Title of returned movie
+	 */
 	public void movieReturn(String title) throws IOException {
 		aLsignedoutTitles.remove(title);
 		for (int i = 0; i < signedoutMovies.size(); i++) {
@@ -210,6 +241,11 @@ public class Controller {
 		}	
 	}
 
+	/**
+	 * This method adds the new student's credentials to the list of users and the text file which contains each user
+	 * @param u - Username of new student
+	 * @param pw - Password of new student
+	 */
 	public void addStudent(String u, char[] pw) {
 		String str = new String(pw);
 		File iaFile = new File("IAuserData.txt");
@@ -227,6 +263,18 @@ public class Controller {
 		System.out.println(data.getuserData());
 	}
 	
+	/**
+	 * This method adds the new movie to its respective text file and ArrayList
+	 * @param title
+	 * @param rating 
+	 * @param year
+	 * @param runTime
+	 * @param img - The name of the image stored in the "images" folder
+	 * @param genre
+	 * @param language
+	 * @param director
+	 * @param summary - Brief plot summary of the movie
+	 */
 	public void addMovie(String title, String rating, String year, String runTime, String img, String genre, String language, String director, String summary) {
 		String[] arrMovie = {title,rating,year,runTime,img,genre,language,director,summary};
 		movies.add(new Movie(arrMovie));
@@ -242,8 +290,15 @@ public class Controller {
 		}catch (IOException e) {
 		    System.out.println("ERROR");
 		}
+		
+		sortAL();
+		
 	}
-	
+	/**
+	 * This method changes a user's password in both the text file and ArrayList
+	 * @param u - Username
+	 * @param pw - New password
+	 */
 	public void changePword(String u, char[] pw) throws IOException{    
 		String str = new String(pw);
 		for (int n = 0; n < data.getuserData().size(); n+=2) {
@@ -282,13 +337,36 @@ public class Controller {
 			System.out.println("File could not be created");
 		}
     }
-	
+	/**
+	 * This is an accessor method for the list of either students or admins 
+	 * @param n 
+	 */
 	public IASystemData getData(int n) {
 		if (n == 0) {
 			return data;
 		}
 		else{
 			return adminData;
+		}
+	}
+	
+	/**
+	 * Alphabetically sorts each movie in the catalogue by title
+	 * Selection sort of time complexity - O(n^2)
+	 */
+	public void sortAL() {
+		int len = movies.size();
+		for (int j = 0; j < (len - 1); j++) {
+			int tempIndex = j;
+			
+			for (int i = (j+1); i < len; i++) {
+				if (movies.get(i).getTitle().compareToIgnoreCase(movies.get(tempIndex).getTitle()) < 0) {
+					tempIndex = i;
+				}
+			}
+			Movie temp = movies.get(tempIndex);
+			movies.set(tempIndex, movies.get(j));
+			movies.set(j, temp);
 		}
 	}
 	

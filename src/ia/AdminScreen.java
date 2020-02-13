@@ -99,7 +99,7 @@ public class AdminScreen extends JFrame {
 		
 		titletext.setFont(c1.title);
 		titletext.setForeground(c1.WHITE);
-		titlePanel.setPreferredSize(new Dimension(615,60));
+		titlePanel.setPreferredSize(new Dimension(445,60));
 		
 		titlePanel.add(titletext);
 		titlePanel.setBackground(c1.GREEN);
